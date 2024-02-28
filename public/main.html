@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>My site</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCxV1AwhwRcrQvFqPXUYJ7XXwoXc4EBYaI&callback=console.debug&libraries=maps,marker&v=beta"></script>
+
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500&family=Raleway:wght@600&display=swap" rel="stylesheet">
+  <style>
+    * {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+.banner {
+    width: 100%;
+    height: 100vh;
+    background-image: linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0.5), rgba(0,0,0.75)), url("public/classic.png");
+    background-size: cover;
+    background-position: center;
+}
+.btn-lg {
+    font-family: sans-serif;
+    height: 70px;
+    width: 30%;
+    border: none;
+    outline: none;
+    background-color: gray;
+    color: black;
+    font-weight: 700;
+    border-radius: 30px;
+}
+
+#map {
+  height: 50%;
+  width: 90%;
+  margin-left: 5%;
+}
+  html,
+  body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+  }
+  .card {
+    border-radius: 20px;
+    margin: 5%;
+    box-shadow: 5px 5px 10px rgba(0,0,0,0.3);
+  }
+  .card-img-top {
+    border-radius: 20px;
+  }
+
+  </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+  <a class="navbar-brand" href="#">
+    <img src="/public/logoAI.png" alt="logo" style="width: 20%; border-radius: 20px;">
+  </a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="collapsibleNavbar">
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item">
+        <a class="nav-link" href="/page1">Sign up</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/page2">Log in</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">Link</a>
+      </li>    
+    </ul>
+  </div>  
+</nav>
+<div class="banner">
+<div class="container-fluid">
+  <div class="row">
+      <div class="col-sm-4"></div>
+      <div class="col-sm-4" style="margin-top: 55vh;">
+        <p style="color: darkgray;  font-size: 200%; margin-left: 25%; font-family: 'Poppins', sans-serif;">
+        Super value deals
+        </p><p style="color: cadetblue; font-size: 150%; margin-left: 35%; font-family: 'Raleway', sans-serif;">
+        On all products 
+      </p>
+        <br>
+        <button type="button" id="menu" class="btn btn-outline-secondary btn-lg" style="margin-left: 40%;">Shop Now</button>
+      </div>
+      <div class="col-sm-4"></div>
+      </div>
+  </div>
+</div>
+
+<div class="container" style="margin-top:10%">
+  <h2>Read all recent news in fashion industry</h2>
+  <div class="row content" style="justify-content: center;">
+  </div>
+    
+</div>
+<h2 style="margin-left:10%; margin-bottom: 2%;">Our location</h2>
+
+<div id="map"></div>
+
+  <p style="font-family: 'Poppins'; margin: 2% 5%;">Your style adventure begins here.
+    We are located in Astana, Kazakhstan.
+    We are waiting for you!
+  </p>
+
+
+<div class="jumbotron text-center" style="margin-bottom:0">
+  <p id="quote">What a strange power there is in clothing.</p>
+    <h3 id="author">Isaac Bashevis Singer</h3>
+    <button id="btn" class="btn btn-outline-secondary">Get new</button>
+</div>
+
+<script>
+  const fetchNews = async (q)=> {
+    console.log("Fetching news...");
+  var url = 'https://newsapi.org/v2/everything?' +
+          'q=' +q+
+          '&from=2024-02-01&' +
+          'pageSize=10&' +
+          'language=en&' +
+          'page=1' +
+          'sortBy=popularity&' +
+          'apiKey=66c59e88bc4d4a79b106f833cb55d727';
+
+var req = new Request(url);
+
+  let a = await fetch(req)  
+        let response = await a.json()
+        console.log(JSON.stringify(response)) 
+          console.log(response)
+    let str = ""
+    for (let item of response.articles) {
+      str = str + `<div class="card" style="width:400px;">
+        <img class="card-img-top" src="${item.urlToImage}" alt="Card image">
+        <div class="card-body">
+          <h4 class="card-title">${item.title}</h4>
+          <p class="card-text">${item.description}</p>
+          <a href="${item.url}" target="_blank" class="btn btn-secondary">Read more...</a>
+        </div>
+      </div>`
+    }
+    document.querySelector(".content").innerHTML = str
+  }
+  fetchNews("+style+fashion")
+
+  let quote = document.getElementById("quote");
+      let author = document.getElementById("author");
+      let btn = document.getElementById("btn");
+
+      const url = "https://api.quotable.io/random";
+
+      let getQuote = () => {
+        fetch(url)
+        .then((data) => data.json())
+        .then((item) => {
+          quote.innerText = item.content;
+          author.innerText = item.author;
+        });
+      };
+
+      window.addEventListener("load", getQuote);
+      btn.addEventListener("click", getQuote);
+</script> 
+<script>(g=>{var h,a,k,p="The Google Maps JavaScript API",c="google",l="importLibrary",q="__ib__",m=document,b=window;b=b[c]||(b[c]={});var d=b.maps||(b.maps={}),r=new Set,e=new URLSearchParams,u=()=>h||(h=new Promise(async(f,n)=>{await (a=m.createElement("script"));e.set("libraries",[...r]+"");for(k in g)e.set(k.replace(/[A-Z]/g,t=>"_"+t[0].toLowerCase()),g[k]);e.set("callback",c+".maps."+q);a.src=`https://maps.${c}apis.com/maps/api/js?`+e;d[q]=f;a.onerror=()=>h=n(Error(p+" could not load."));a.nonce=m.querySelector("script[nonce]")?.nonce||"";m.head.append(a)}));d[l]?console.warn(p+" only loads once. Ignoring:",g):d[l]=(f,...n)=>r.add(f)&&u().then(()=>d[l](f,...n))})
+  ({key: "AIzaSyCxV1AwhwRcrQvFqPXUYJ7XXwoXc4EBYaI", v: "weekly"});</script>
+  <script>
+    let map;
+
+async function initMap() {
+const { Map } = await google.maps.importLibrary("maps");
+const { AdvancedMarkerView } = await google.maps.importLibrary("marker");
+
+map = new Map(document.getElementById("map"), {
+center: { lat: 51.130191802978516, lng: 71.41486358642578 },
+zoom: 16,
+});
+
+const marker = new google.maps.Marker({
+position: { lat: 51.130191802978516, lng: 71.41486358642578 },
+map: map,
+label: "",
+title: "Our Office",
+draggable: false,
+animation: google.maps.Animation.BOUNCE
+});
+
+const infoWindow = new google.maps.InfoWindow({
+content: "<p>We are located in Astana</p>"
+});
+infoWindow.open(map, marker);
+}
+
+initMap();
+  </script>
+</body>
+</html>

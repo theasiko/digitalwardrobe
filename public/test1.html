@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Simple Map</title>
+    <style>
+      #map {
+        height: 70%;
+        width: 50%;
+        margin: 3%;
+      }
+
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>Here's the map</h2>
+    <div id="map"></div>
+
+    <script>
+      function initMap() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const lat = parseFloat(urlParams.get('lat')) || -25.363;
+        const lng = parseFloat(urlParams.get('lng')) || 131.044;
+
+        const myLatlng = { lat: lat, lng: lng };
+        const map = new google.maps.Map(document.getElementById("map"), {
+          zoom: 4,
+          center: myLatlng,
+        });
+
+        let infoWindow = new google.maps.InfoWindow({
+          content: "Click the map to get Lat/Lng!",
+          position: myLatlng,
+        });
+
+        infoWindow.open(map);
+
+        map.addListener("click", (mapsMouseEvent) => {
+          infoWindow.close();
+          infoWindow = new google.maps.InfoWindow({
+            position: mapsMouseEvent.latLng,
+          });
+          infoWindow.setContent(
+            JSON.stringify(mapsMouseEvent.latLng.toJSON(), null, 2),
+          );
+          infoWindow.open(map);
+
+          const newLat = mapsMouseEvent.latLng.lat();
+          const newLng = mapsMouseEvent.latLng.lng();
+          const newParams = new URLSearchParams(window.location.search);
+          newParams.set('lat', newLat);
+          newParams.set('lng', newLng);
+          window.history.replaceState({}, '', `${location.pathname}?${newParams}`);
+        });
+      }
+
+      function loadMapScript() {
+        const script = document.createElement("script");
+        script.src =
+          "https://maps.googleapis.com/maps/api/js?key=AIzaSyCxV1AwhwRcrQvFqPXUYJ7XXwoXc4EBYaI&callback=initMap&v=weekly";
+        script.defer = true;
+        document.body.appendChild(script);
+      }
+
+      window.onload = loadMapScript;
+    </script>
+  </body>
+</html>

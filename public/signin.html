@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Log in</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500&family=Raleway:wght@600&display=swap" rel="stylesheet">
+    <style>
+        * {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+.container {
+    width: 100%;
+    height: 100vh;
+    background-image: linear-gradient(rgba(0,0,50,0.8), rgba(0,0,50,0.8)), url(/public/background_reg.jpg);
+    background-position: center;
+    background-size: cover;
+    position: relative;
+}
+input {
+    border-radius: 20px;
+    background-color: lightcyan;
+
+}
+.form-box {
+    font-family: 'Poppins', sans-serif;
+    width: 90%;
+    max-width: 450px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #fff;
+    padding: 90px 60px 40px;
+    text-align: center;
+}
+.form-box h1 {
+    font-size: 30px;
+    margin-bottom: 50px;
+    color: #3c00a0;
+    position: relative;
+}
+.form-box h1::after {
+    content: '';
+    width: 30px;
+    height: 4 px;
+    border-radius: 3 px;
+    background: #3c00a0;
+    position: absolute;
+    bottom: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+.input-field {
+    background: #eaeaea;
+    margin: 15px 0;
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+}
+input {
+    width: 100%;
+    background: transparent;
+    border: 0;
+    outline: 0;
+    padding: 18px 15px;
+}
+.btn-field {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+.btn-field button {
+    flex-basis: 48%;
+    background: #3c00a0;
+    color: #fff;
+    height: 40px;
+    border-radius: 20px;
+    border: 0;
+    outline: 0;
+    cursor: pointer;
+}
+.input-group {
+    height: 280px;
+}
+    </style>
+</head>
+<body>
+    <div class="container">
+    <div class="form-box">
+    <h1>Log In</h1>
+    <div class="input-group">
+    <form action="/login" method="post">
+        <div class="input-field">
+        <input type="text" id="username" name="username" placeholder="Username" required><br>
+        </div>
+        <div class="input-field">
+        <input type="password" id="password" name="password" placeholder="Password" required><br>
+        </div>
+        <div class="btn-field">
+        <button type="submit">Submit</button>
+        <button type="button" id="signup">Sign up</button>
+            
+        </div>
+        <div id="console-messages"></div>
+        <div id="server-responses"></div>
+    </div>
+    </form>
+</div>
+</div>
+</div>
+<script>
+    var btnElement = document.getElementById('signup');
+
+btnElement.addEventListener('click', function() {
+    window.location.href = '/public/index.html';
+});
+
+// Fetch login response from server
+fetch('/login', {
+    method: 'POST',
+    body: JSON.stringify({ username: 'example', password: 'password' }),
+    headers: {
+        'Content-Type': 'application/json'
+    }
+})
+.then(response => response.json())
+.then(data => {
+    // Display response message
+    showMessage(data.message || data.error);
+})
+.catch(error => {
+    console.error('Error:', error);
+    showMessage('Error occurred. Please try again later.');
+});
+
+// Function to display messages
+function showMessage(message) {
+    const messageContainer = document.getElementById('message-container');
+    const messageElement = document.createElement('p');
+    messageElement.textContent = message;
+    messageContainer.appendChild(messageElement);
+}
+
+</script>
+</body>
+</html>
